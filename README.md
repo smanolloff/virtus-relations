@@ -1,6 +1,6 @@
 # Virtus::Relations
 
-Add relation-like support to Virtus models.
+Adds relations to Virtus objects.
 
 ## Installation
 
@@ -16,51 +16,55 @@ In your source code:
 require 'virtus/relations'
 ```
 
-## Usage
-
-Example:
+## Usage examples
+Given the following classes:
 ```ruby
 require 'virtus/relations'
 
-class Address
+class Kid
   include Virtus.model
-  include Virtus.relations
-
-  attribute :city, String
-end
-
-class User
-  include Virtus.model
-  include Virtus.relations
 
   attribute :name, String
-  attribute :address, Address, relation: true, lazy: true, default: :load_address
-
-  def load_address
-    { city: 'Paris' }
-  end
 end
 
-## Mass-assignment
-u = User.new(name: 'Bob', address: { city: 'Vegas' })
-u.address.parent.eql?(u)
-# => true
+class Mother
+  include Virtus.model
+  include Virtus.relations(as: :mom)
 
-## Explicit assignment
-u2 = User.new(name: 'Dan')
-u2.address = { city: 'LA' }
-u2.address.parent.eql?(u2) # => true
+  attribute :name, String
+  attribute :kid, Kid, relation: true, lazy: true, default: :load_kid
 
-## Lazy assignment
-u3 = User.new(name: 'Luke')
-u3.address.parent.eql?(u3) # => true
-
-## A child can still be created without a parent
-a = Address.new
-a.parent
-# => NoMethodError: undefined method `parent' for #<Address:0x007...
+  def load_kid
+    { name: 'Billy' }
+  end
+end
 ```
 
+You can do the following:
+```ruby
+### Explicit assignment
+alice = Mother.new(name: 'Alice')
+alice.kid = { name: 'Danny' }
+alice.kid.mom
+#<Mother:0x007fa43415fda8 @name="Alice", ...>
+
+### Mass-assignment
+emma = Mother.new(name: 'Emma', kid: { name: 'Johnny' })
+emma.kid.mom
+# => #<Mother:0x007fc40dbbdbf8 @name="Emma", ...>
+
+### Lazy assignment
+mia = Mother.new(name: 'Mia')
+mia.kid.mom
+# => #<Mother:0x007fa435d27130 @name="Mia", ...>
+
+### Objects can still be created without a parent
+orphan = Kid.new(name: 'Deirdre')
+orphan.parent
+# => NoMethodError: undefined method `parent' for #<Kid:0x007...
+```
+
+The `:as` option defaults to `parent` when omitted
 
 ## Contributing
 

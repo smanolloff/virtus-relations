@@ -2,11 +2,12 @@ require 'spec_helper'
 require 'active_support/core_ext/object/instance_variables'
 
 describe Virtus::Relations do
+  # The child
   class C
     include Virtus.model
-    include Virtus.relations
   end
 
+  # The parent, referenced by Child#parent
   class P
     include Virtus.model
     include Virtus.relations
@@ -27,8 +28,23 @@ describe Virtus::Relations do
     end
   end
 
+  # Another parent, but referenced by Child#father
+  class F
+    include Virtus.model
+    include Virtus.relations(as: :father)
+
+    attribute :c, C, relation: true
+  end
+
+  it 'allow to specify a relation name' do
+    f = F.new
+    f.c = {}
+
+    expect(f.c.father).to be(f)
+  end
+
   describe 'Object#parent' do
-    describe 'when initialized via a related attribute' do
+    context 'when initialized via a related attribute' do
       context 'of non-array type' do
         context 'and is mass-assigned' do
           let(:p) { P.new(c_1: {}) }
@@ -98,5 +114,7 @@ describe Virtus::Relations do
       end
     end
   end
+
+  describe ''
 
 end
