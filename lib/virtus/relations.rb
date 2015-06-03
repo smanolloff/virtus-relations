@@ -13,7 +13,8 @@ module Virtus
       def self.class_methods
         Module.new do
           # During instantiation, .relation_attributes is called
-          # If class was instantiated before, just return the list of related attributes
+          # If class was instantiated before, just return the list of related
+          # attributes
           #
           # If instantiated for the first time, then monkey-patch some instance
           # methods to allow relation attributes to work with accessor methods.
@@ -91,8 +92,8 @@ module Virtus
             case attribute.default_value.value
             when Proc
               old_proc = attribute.default_value.value
-              new_proc = proc do |object, *_|
-                return_value = attribute.coerce(old_proc.call(*[object, *_]))
+              new_proc = proc do |object, *args|
+                return_value = attribute.coerce(old_proc.call(*[object, *args]))
                 object.class.relate(return_value, object)
               end
 
@@ -156,7 +157,6 @@ module Virtus
               dup_not_related
             end
           end
-
         end # Module.new
       end # def
 
