@@ -46,7 +46,7 @@ You can do the following:
 alice = Mother.new(name: 'Alice')
 alice.kid = { name: 'Danny' }
 alice.kid.mom
-#<Mother:0x007fa43415fda8 @name="Alice", ...>
+# => <Mother:0x007fa43415fda8 @name="Alice", ...>
 
 ### Mass-assignment
 emma = Mother.new(name: 'Emma', kid: { name: 'Johnny' })
@@ -68,8 +68,8 @@ The `:as` option defaults to `parent` when omitted
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/virtus-relations/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+1. Fork it
+2. Create your feature branch
+3. Comply with the [ruby style guide](https://github.com/bbatsov/ruby-style-guide)
+4. Add tests for your new feature/bugfix. This is important so I don't break it in a future version unintentionally.
+5. Submit a pull request
