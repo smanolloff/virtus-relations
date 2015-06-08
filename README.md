@@ -60,11 +60,17 @@ mia.kid.mom
 
 ### Objects can still be created without a parent
 orphan = Kid.new(name: 'Deirdre')
-orphan.parent
-# => NoMethodError: undefined method `parent' for #<Kid:0x007...
+orphan.mom
+# => NoMethodError: undefined method `mom' for #<Kid:0x007...
 ```
 
-The `:as` option defaults to `parent` when omitted
+The `:as` option defaults to `:parent` when omitted
+
+## Why relations?
+Although regular attributes could be used to mimic this behavior, using relations can have two key benefits:
+
+1. It does not create circular dependencies (known to cause issues with serializers)
+2. It allows polymorphic relations (e.g. an Address can belong to either a User, or a Company)
 
 ## Contributing
 
